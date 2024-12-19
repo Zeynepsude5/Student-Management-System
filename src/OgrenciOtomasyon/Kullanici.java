@@ -2,11 +2,7 @@ package OgrenciOtomasyon;
 
 import java.util.Scanner;
 
-<<<<<<< Updated upstream
-public abstract class Kullanici {
-=======
 public abstract class Kullanici implements ProfilIslem {
->>>>>>> Stashed changes
 	private int kullaniciId;
 	private String isim;
 	private String soyisim;

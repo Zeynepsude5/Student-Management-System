@@ -16,17 +16,6 @@ public class OgretimUyesi extends Kullanici implements OgretimUyeIslem {
         System.out.println("Öğretim Üyesi Profili: ");
         System.out.println("ID: " + getKullaniciId());
         System.out.println("İsim: " + getIsim() + " " + getSoyisim());
-<<<<<<< Updated upstream
-	    System.out.println("Verilen Dersler:");
-	    if (verilenDersler.isEmpty()) {
-	        System.out.println("Sistemde kayıtlı dersiniz yok.");
-	    } else {
-	        for (String ders : verilenDersler) {
-	            System.out.println("- " + ders);
-	        }
-	    }
-    }
-=======
         System.out.println("Verilen Dersler:");
 
         if (verilenDersler.isEmpty()) {
@@ -88,5 +77,4 @@ public class OgretimUyesi extends Kullanici implements OgretimUyeIslem {
         verilenDersler.add(ders);
         System.out.println(ders.getDersAdi() + " dersi başarıyla açıldı.");
     }
->>>>>>> Stashed changes
 }

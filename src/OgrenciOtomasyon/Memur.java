@@ -11,8 +11,6 @@ public class Memur extends Kullanici {
         System.out.println("ID: " + getKullaniciId());
         System.out.println("İsim: " + getIsim() + " " + getSoyisim());
     }
-<<<<<<< Updated upstream
-=======
     /*
     public void ogrenciKaydet(Ogrenci ogrenci) {
         System.out.println("Yeni öğrenci kaydedildi:");
@@ -29,5 +27,4 @@ public class Memur extends Kullanici {
 		setSifre(yeniSifre);
 		System.out.println("Şifre başarıyla değiştirildi.");
 	}
->>>>>>> Stashed changes
 }
