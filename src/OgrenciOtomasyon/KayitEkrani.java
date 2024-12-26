@@ -67,7 +67,6 @@ class KayitEkrani extends JFrame {
 
                 int yeniId = KullaniciVeritabani.getYeniId(); // Yeni ID otomatik oluşturulur
                 
-                // Kullanıcı rolüne göre doğru sınıfı yarat
                 Kullanici yeniKullanici;
                 if (rol.equals("Öğrenci")) {
                     yeniKullanici = new Ogrenci(yeniId, isim, soyisim, sifre);

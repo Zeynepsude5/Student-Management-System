@@ -14,8 +14,8 @@ public class KullaniciVeritabani {
         kullaniciMap.put(kullanici.getKullaniciId(), kullanici);
     }
 
-    public static Kullanici kullaniciBul(int id) {
-        return kullaniciMap.get(id);
+    public static Kullanici kullaniciBul(int receiverId) {
+        return kullaniciMap.get(receiverId);
     }
 
     public static boolean kullaniciVarMi(int id) {

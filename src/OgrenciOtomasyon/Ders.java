@@ -10,7 +10,7 @@ public class Ders {
         this.dersAdi = dersAdi;
         this.dersKodu = dersKodu;
         this.ogretimUyesi = ogretimUyesi;
-        this.not = null; // Varsayılan olarak null.
+        this.not = null;
     }
 
     // Getters and Setters

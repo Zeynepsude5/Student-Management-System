@@ -11,13 +11,6 @@ public class Memur extends Kullanici {
         System.out.println("ID: " + getKullaniciId());
         System.out.println("İsim: " + getIsim() + " " + getSoyisim());
     }
-    /*
-    public void ogrenciKaydet(Ogrenci ogrenci) {
-        System.out.println("Yeni öğrenci kaydedildi:");
-        System.out.println("Öğrenci ID: " + ogrenci.getKullaniciId());
-        System.out.println("İsim: " + ogrenci.getIsim() + " " + ogrenci.getSoyisim());
-    }
-    */
     public void gorevBilgisiGoster() {
     	System.out.println(	getIsim() + "Memur olarak çalışıyor.");
     }

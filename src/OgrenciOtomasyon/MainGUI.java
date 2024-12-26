@@ -7,9 +7,6 @@ import java.awt.event.ActionListener;
 
 public class MainGUI extends JFrame{
 
-    /**
-     * @wbp.parser.entryPoint
-     */
 	public static void main(String[] args) {
 	    EventQueue.invokeLater(() -> {
 	        try {
@@ -21,4 +18,3 @@ public class MainGUI extends JFrame{
 	    });
 	}
 }
-
