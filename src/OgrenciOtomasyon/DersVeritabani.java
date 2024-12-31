@@ -1,5 +1,6 @@
 package OgrenciOtomasyon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DersVeritabani {
@@ -27,6 +28,10 @@ public class DersVeritabani {
                 System.out.println("- " + ders.getDersAdi() + " (" + ders.getDersKodu() + ")");
             }
         }
+    }
+    
+    public static ArrayList<Ders> getTumDersler() {
+        return new ArrayList<>(dersMap.values());
     }
 
     public static void dersSil(String dersKodu) {

@@ -12,19 +12,21 @@ public class OgretimUyesi extends Kullanici implements OgretimUyeIslem {
     }
 
     @Override
-    public void profilGoruntule() {
-        System.out.println("Öğretim Üyesi Profili: ");
-        System.out.println("ID: " + getKullaniciId());
-        System.out.println("İsim: " + getIsim() + " " + getSoyisim());
-        System.out.println("Verilen Dersler:");
+    public String profilBilgileri() {
+        StringBuilder profilBilgileri = new StringBuilder();
+        profilBilgileri.append("ID: ").append(getKullaniciId()).append("\n");
+        profilBilgileri.append("İsim: ").append(getIsim()).append(" ").append(getSoyisim()).append("\n");
+        profilBilgileri.append("Verilen Dersler:\n");
 
         if (verilenDersler.isEmpty()) {
-            System.out.println("Henüz sistemde kayıtlı dersiniz yok.");
+            profilBilgileri.append("Henüz sistemde kayıtlı dersiniz yok.\n");
         } else {
             for (Ders ders : verilenDersler) {
-                System.out.println("- " + ders.getDersAdi() + " (" + ders.getDersKodu() + ")");
+                profilBilgileri.append("- ").append(ders.getDersAdi()).append(" (").append(ders.getDersKodu()).append(")\n");
             }
         }
+
+        return profilBilgileri.toString();
     }
 
     @Override

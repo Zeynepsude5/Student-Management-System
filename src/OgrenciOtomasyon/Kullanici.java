@@ -70,7 +70,7 @@ public abstract class Kullanici implements ProfilIslem {
     }
 
     // Tüm kullanıcıların uygulaması gereken metot
-    public abstract void profilGoruntule();
+    public abstract String profilBilgileri();
 
     // Giriş işlemi
     public void girisYap(Scanner scanner) {

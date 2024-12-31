@@ -104,5 +104,3 @@ class KayitEkrani extends JFrame {
         panel.add(lblNewLabel);
     }
 }
-
-	

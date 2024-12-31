@@ -12,18 +12,20 @@ public class Ogrenci extends Kullanici implements OgrenciIslem {
     }
 
     @Override
-    public void profilGoruntule() {
-        System.out.println("Öğrenci Profili: ");
-        System.out.println("Öğrenci numarası: " + getKullaniciId());
-        System.out.println("İsim: " + getIsim() + " " + getSoyisim());
-        System.out.println("Alınan Dersler:");
+    public String profilBilgileri() {
+        StringBuilder profilBilgileri = new StringBuilder();
+        profilBilgileri.append("Öğrenci Numarası: ").append(getKullaniciId()).append("\n");
+        profilBilgileri.append("İsim: ").append(getIsim()).append(" ").append(getSoyisim()).append("\n");
+        profilBilgileri.append("Alınan Dersler:\n");
+
         if (alinanDersler.isEmpty()) {
-            System.out.println("Henüz ders seçilmedi.");
+            profilBilgileri.append("Henüz ders seçilmedi.\n");
         } else {
             for (Ders ders : alinanDersler) {
-                System.out.println(ders.getDersAdi() + " (" + ders.getDersKodu() + ")");
+                profilBilgileri.append("- ").append(ders.getDersAdi()).append(" (").append(ders.getDersKodu()).append(")\n");
             }
         }
+        return profilBilgileri.toString();
     }
 
     @Override
@@ -40,6 +42,8 @@ public class Ogrenci extends Kullanici implements OgrenciIslem {
                 return;
             }
         }
+        alinanDersler.add(ders);
+        System.out.println("Ders başarıyla seçildi: " + ders.getDersAdi());
     }
 
     @Override

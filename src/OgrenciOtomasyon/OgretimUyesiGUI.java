@@ -2,7 +2,6 @@ package OgrenciOtomasyon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class OgretimUyesiGUI extends JFrame {
 
@@ -14,7 +13,7 @@ public class OgretimUyesiGUI extends JFrame {
 
         setTitle("Öğretim Üyesi Paneli");
         setSize(600, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Panel üst kısmı: Hoşgeldiniz Mesajı
@@ -29,7 +28,7 @@ public class OgretimUyesiGUI extends JFrame {
 
         // Panel orta kısmı: Butonlar
         JPanel pnlButtons = new JPanel();
-        pnlButtons.setLayout(new GridLayout(6, 1, 10, 10));
+        pnlButtons.setLayout(new GridLayout(7, 1, 10, 10));
         pnlButtons.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JButton btnDersAc = new JButton("Ders Aç");
@@ -37,16 +36,19 @@ public class OgretimUyesiGUI extends JFrame {
         JButton btnProfilGoruntule = new JButton("Profil Görüntüle");
         JButton btnMesajGonder = new JButton("Mesaj Gönder");
         JButton btnMesajlariGor = new JButton("Mesajları Gör");
+        JButton btnSifreDegistir = new JButton("Şifre Değiştir");
+        JButton btnCikisYap = new JButton("Çıkış Yap");
 
-        // Add buttons to the panel
         pnlButtons.add(btnDersAc);
         pnlButtons.add(btnNotGir);
         pnlButtons.add(btnProfilGoruntule);
         pnlButtons.add(btnMesajGonder);
         pnlButtons.add(btnMesajlariGor);
+        pnlButtons.add(btnSifreDegistir);
+        pnlButtons.add(btnCikisYap);
 
         add(pnlButtons, BorderLayout.CENTER);
-
+        
         // Panel alt kısmı: Footer
         JPanel pnlFooter = new JPanel();
         pnlFooter.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -55,17 +57,7 @@ public class OgretimUyesiGUI extends JFrame {
         lblFooter.setFont(new Font("Arial", Font.ITALIC, 12));
         pnlFooter.add(lblFooter);
         add(pnlFooter, BorderLayout.SOUTH);
-
-        // Button Actions
-        btnDersAc.addActionListener(e -> {
-            String dersAdi = JOptionPane.showInputDialog("Ders Adı:");
-            String dersKodu = JOptionPane.showInputDialog("Ders Kodu:");
-            if (dersAdi != null && dersKodu != null) {
-                ogretimUyesi.dersAc(new Ders(dersKodu, dersAdi, ogretimUyesi));
-                JOptionPane.showMessageDialog(this, "Ders başarıyla açıldı.", "Bilgi", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
+        
         btnNotGir.addActionListener(e -> {
             try {
                 int ogrNo = Integer.parseInt(JOptionPane.showInputDialog("Öğrenci Numarası:"));
@@ -78,9 +70,7 @@ public class OgretimUyesiGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "Hatalı giriş. Lütfen tekrar deneyin.", "Hata", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-        btnProfilGoruntule.addActionListener(e -> ogretimUyesi.profilGoruntule());
-
+        
         btnMesajGonder.addActionListener(e -> {
             String receiverIdStr = JOptionPane.showInputDialog("Alıcı ID'sini Girin:");
             String content = JOptionPane.showInputDialog("Mesaj İçeriğini Girin:");
@@ -108,6 +98,63 @@ public class OgretimUyesiGUI extends JFrame {
                 }
             }
             JOptionPane.showMessageDialog(this, mesajlar.toString(), "Mesajlar", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        // Çıkış Yap Butonu İşlevi
+        btnCikisYap.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Çıkış yapmak istediğinizden emin misiniz?",
+                "Çıkış",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose(); // Mevcut pencereyi kapat
+            }
+        });
+        
+        btnDersAc.addActionListener(e -> {
+            // Kullanıcıdan ders bilgilerini alın
+            String dersAdi = JOptionPane.showInputDialog(this, "Ders Adı Girin:");
+            String dersKodu = JOptionPane.showInputDialog(this, "Ders Kodu Girin:");
+
+            if (dersAdi == null || dersAdi.isEmpty() || dersKodu == null || dersKodu.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ders bilgileri eksik. Lütfen tekrar deneyin.", "Hata", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Yeni Ders Nesnesi Oluştur
+            Ders yeniDers = new Ders(dersAdi, dersKodu, ogretimUyesi);
+
+            // Öğretim üyesine ekle
+            ogretimUyesi.dersAc(yeniDers);
+
+            // Ders veritabanına ekle
+            DersVeritabani.dersEkle(yeniDers);
+
+            // Kullanıcıya başarı mesajı
+            JOptionPane.showMessageDialog(this, "Ders başarıyla açıldı: " + dersAdi, "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
+        btnProfilGoruntule.addActionListener(e -> {
+            String profilBilgileri = ogretimUyesi.profilBilgileri();
+            JOptionPane.showMessageDialog(
+                this,
+                profilBilgileri,
+                "Profil Bilgileri",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        });
+        
+        btnSifreDegistir.addActionListener(e -> {
+            String yeniSifre = JOptionPane.showInputDialog(this, "Yeni şifreyi girin:");
+            if (yeniSifre != null && !yeniSifre.isEmpty()) {
+                ogretimUyesi.sifreDegister(yeniSifre);
+                JOptionPane.showMessageDialog(this, "Şifre başarıyla değiştirildi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Şifre boş olamaz.", "Hata", JOptionPane.ERROR_MESSAGE);
+            }
         });
     }
 }

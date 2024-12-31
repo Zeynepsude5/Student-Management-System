@@ -2,7 +2,7 @@ package OgrenciOtomasyon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class OgrenciGUI extends JFrame {
 
@@ -14,7 +14,7 @@ public class OgrenciGUI extends JFrame {
 
         setTitle("Öğrenci Paneli");
         setSize(600, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Panel üst kısmı: Hoşgeldiniz Mesajı
@@ -29,7 +29,7 @@ public class OgrenciGUI extends JFrame {
 
         // Panel orta kısmı: Butonlar
         JPanel pnlButtons = new JPanel();
-        pnlButtons.setLayout(new GridLayout(7, 1, 10, 10));
+        pnlButtons.setLayout(new GridLayout(9, 1, 10, 10));
         pnlButtons.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JButton btnDersSec = new JButton("Ders Seç");
@@ -39,6 +39,8 @@ public class OgrenciGUI extends JFrame {
         JButton btnProfilGoruntule = new JButton("Profil Görüntüle");
         JButton btnMesajGonder = new JButton("Mesaj Gönder");
         JButton btnMesajlariGor = new JButton("Mesajları Gör");
+        JButton btnSifreDegistir = new JButton("Şifre Değiştir");
+        JButton btnCikisYap = new JButton("Çıkış Yap");
 
         pnlButtons.add(btnDersSec);
         pnlButtons.add(btnDersSil);
@@ -47,6 +49,8 @@ public class OgrenciGUI extends JFrame {
         pnlButtons.add(btnProfilGoruntule);
         pnlButtons.add(btnMesajGonder);
         pnlButtons.add(btnMesajlariGor);
+        pnlButtons.add(btnSifreDegistir);
+        pnlButtons.add(btnCikisYap);
 
         add(pnlButtons, BorderLayout.CENTER);
 
@@ -58,20 +62,39 @@ public class OgrenciGUI extends JFrame {
         lblFooter.setFont(new Font("Arial", Font.ITALIC, 12));
         pnlFooter.add(lblFooter);
         add(pnlFooter, BorderLayout.SOUTH);
-
-        // Button Actions
+        
         btnDersSec.addActionListener(e -> {
-            String dersAdi = JOptionPane.showInputDialog("Ders Adı:");
-            String dersKodu = JOptionPane.showInputDialog("Ders Kodu:");
-            Ders ders = DersVeritabani.dersBul(dersKodu);
-            if (ders == null) {
-                JOptionPane.showMessageDialog(this, "Bu ders sistemde kayıtlı değil.", "Hata", JOptionPane.ERROR_MESSAGE);
-            } else {
-                ogrenci.dersSec(ders);
-                JOptionPane.showMessageDialog(this, "Ders başarıyla seçildi: " + ders.getDersAdi(), "Bilgi", JOptionPane.INFORMATION_MESSAGE);
+            // Tüm dersleri listele
+            StringBuilder dersListesi = new StringBuilder("Mevcut Dersler:\n");
+            ArrayList<Ders> tumDersler = new ArrayList<>(DersVeritabani.getTumDersler());
+            
+            if (tumDersler.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Henüz sistemde kayıtlı ders bulunmamaktadır.", "Hata", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            for (int i = 0; i < tumDersler.size(); i++) {
+                Ders ders = tumDersler.get(i);
+                dersListesi.append(i + 1).append(". ").append(ders.getDersAdi()).append(" (").append(ders.getDersKodu()).append(")\n");
+            }
+
+            // Ders listesini kullanıcıya göster ve seçim yapmasını iste
+            String secimStr = JOptionPane.showInputDialog(this, dersListesi.toString() + "\nLütfen seçmek istediğiniz dersin numarasını girin:");
+            
+            try {
+                int secim = Integer.parseInt(secimStr);
+                if (secim < 1 || secim > tumDersler.size()) {
+                    JOptionPane.showMessageDialog(this, "Geçersiz bir seçim yaptınız.", "Hata", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Ders secilenDers = tumDersler.get(secim - 1);
+                    ogrenci.dersSec(secilenDers);
+                    JOptionPane.showMessageDialog(this, secilenDers.getDersAdi() + " dersi başarıyla seçildi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Geçerli bir sayı giriniz!", "Hata", JOptionPane.ERROR_MESSAGE);
             }
         });
-
+        
         btnDersSil.addActionListener(e -> {
             String dersKodu = JOptionPane.showInputDialog("Silmek istediğiniz dersin kodu:");
             Ders ders = DersVeritabani.dersBul(dersKodu);
@@ -82,7 +105,7 @@ public class OgrenciGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "Ders başarıyla silindi: " + ders.getDersAdi(), "Bilgi", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-
+  
         btnNotSorgula.addActionListener(e -> {
             StringBuilder notBilgisi = new StringBuilder("Not Bilgileri:\n");
             if (ogrenci.alinanDersler.isEmpty()) {
@@ -94,8 +117,8 @@ public class OgrenciGUI extends JFrame {
                 }
             }
             JOptionPane.showMessageDialog(this, notBilgisi.toString(), "Not Bilgileri", JOptionPane.INFORMATION_MESSAGE);
-        });
-
+        });     
+        
         btnNotOrtalama.addActionListener(e -> {
             String mesaj;
             if (ogrenci.alinanDersler.isEmpty()) {
@@ -117,22 +140,7 @@ public class OgrenciGUI extends JFrame {
             }
             JOptionPane.showMessageDialog(this, mesaj, "Not Ortalaması", JOptionPane.INFORMATION_MESSAGE);
         });
-
-        btnProfilGoruntule.addActionListener(e -> {
-            StringBuilder profilBilgisi = new StringBuilder("Öğrenci Profili:\n");
-            profilBilgisi.append("Ad Soyad: ").append(ogrenci.getIsim()).append(" ").append(ogrenci.getSoyisim()).append("\n");
-            profilBilgisi.append("Öğrenci Numarası: ").append(ogrenci.getKullaniciId()).append("\n");
-            profilBilgisi.append("Alınan Dersler:\n");
-            if (ogrenci.alinanDersler.isEmpty()) {
-                profilBilgisi.append("Henüz ders seçilmemiş.");
-            } else {
-                for (Ders ders : ogrenci.alinanDersler) {
-                    profilBilgisi.append("- ").append(ders.getDersAdi()).append(" (").append(ders.getDersKodu()).append(")\n");
-                }
-            }
-            JOptionPane.showMessageDialog(this, profilBilgisi.toString(), "Profil Bilgileri", JOptionPane.INFORMATION_MESSAGE);
-        });
-
+        
         btnMesajGonder.addActionListener(e -> {
             String receiverIdStr = JOptionPane.showInputDialog("Alıcı ID'sini Girin:");
             String content = JOptionPane.showInputDialog("Mesaj İçeriğini Girin:");
@@ -161,5 +169,40 @@ public class OgrenciGUI extends JFrame {
             }
             JOptionPane.showMessageDialog(this, mesajlar.toString(), "Mesajlar", JOptionPane.INFORMATION_MESSAGE);
         });
+
+        // Çıkış Yap Butonu İşlevi
+        btnCikisYap.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Çıkış yapmak istediğinizden emin misiniz?",
+                "Çıkış",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose(); // Mevcut pencereyi kapat
+            }
+        });
+        
+        btnProfilGoruntule.addActionListener(e -> {
+            String profilBilgisi = ogrenci.profilBilgileri();
+            JOptionPane.showMessageDialog(
+                this,
+                profilBilgisi,
+                "Profil Bilgileri",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        });
+        
+        btnSifreDegistir.addActionListener(e -> {
+            String yeniSifre = JOptionPane.showInputDialog(this, "Yeni şifreyi girin:");
+            if (yeniSifre != null && !yeniSifre.isEmpty()) {
+                ogrenci.sifreDegister(yeniSifre);
+                JOptionPane.showMessageDialog(this, "Şifre başarıyla değiştirildi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Şifre boş olamaz.", "Hata", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
     }
 }

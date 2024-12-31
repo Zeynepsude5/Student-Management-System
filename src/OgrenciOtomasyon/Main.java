@@ -14,17 +14,17 @@ public class Main {
         // Öğrenci için giriş yap ve profil görüntüle
         System.out.println("=== Öğrenci Girişi ===");
         ogrenci.girisYap(scanner);
-        ogrenci.profilGoruntule();
+        // ogrenci.profilGoruntule();
 
         // Öğretim Üyesi için giriş yap ve profil görüntüle
         System.out.println("\n=== Öğretim Üyesi Girişi ===");
         ogretimUyesi.girisYap(scanner);
-        ogretimUyesi.profilGoruntule();
+        // ogretimUyesi.profilGoruntule();
 
         // Memur için giriş yap ve profil görüntüle
         System.out.println("\n=== Memur Girişi ===");
         memur.girisYap(scanner);
-        memur.profilGoruntule();
+        // memur.profilGoruntule();
 
         scanner.close(); // Scanner'ı kapat
     }

@@ -6,11 +6,14 @@ public class Memur extends Kullanici {
     }
 
     @Override
-    public void profilGoruntule() {
-        System.out.println("Memur Profili: ");
-        System.out.println("ID: " + getKullaniciId());
-        System.out.println("İsim: " + getIsim() + " " + getSoyisim());
+    public String profilBilgileri() {
+        StringBuilder profilBilgileri = new StringBuilder();
+        profilBilgileri.append("ID: ").append(getKullaniciId()).append("\n");
+        profilBilgileri.append("İsim: ").append(getIsim()).append(" ").append(getSoyisim()).append("\n");
+        profilBilgileri.append("Görev: Memur\n");
+        return profilBilgileri.toString();
     }
+
     public void gorevBilgisiGoster() {
     	System.out.println(	getIsim() + "Memur olarak çalışıyor.");
     }

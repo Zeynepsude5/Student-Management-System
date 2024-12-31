@@ -15,7 +15,7 @@ public class MemurGUI extends JFrame {
 
         setTitle("Memur Paneli");
         setSize(600, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Panel üst kısmı: Hoşgeldiniz Mesajı
@@ -30,7 +30,7 @@ public class MemurGUI extends JFrame {
 
         // Panel orta kısmı: Butonlar
         JPanel pnlButtons = new JPanel();
-        pnlButtons.setLayout(new GridLayout(5, 1, 10, 10));
+        pnlButtons.setLayout(new GridLayout(6, 1, 10, 10));
         pnlButtons.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JButton btnProfilGoruntule = new JButton("Profil Görüntüle");
@@ -38,15 +38,17 @@ public class MemurGUI extends JFrame {
         JButton btnGorevBilgisi = new JButton("Görev Bilgisi Göster");
         JButton btnMesajGonder = new JButton("Mesaj Gönder");
         JButton btnMesajlariGor = new JButton("Mesajları Gör");
+        JButton btnCikisYap = new JButton("Çıkış Yap");
 
         pnlButtons.add(btnProfilGoruntule);
         pnlButtons.add(btnSifreDegistir);
         pnlButtons.add(btnGorevBilgisi);
         pnlButtons.add(btnMesajGonder);
         pnlButtons.add(btnMesajlariGor);
+        pnlButtons.add(btnCikisYap);
 
         add(pnlButtons, BorderLayout.CENTER);
-
+        
         // Panel alt kısmı: Footer
         JPanel pnlFooter = new JPanel();
         pnlFooter.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -55,30 +57,46 @@ public class MemurGUI extends JFrame {
         lblFooter.setFont(new Font("Arial", Font.ITALIC, 12));
         pnlFooter.add(lblFooter);
         add(pnlFooter, BorderLayout.SOUTH);
-
-        // Button Actions
+        
         btnProfilGoruntule.addActionListener(e -> {
-            StringBuilder profilBilgisi = new StringBuilder("Memur Profili:\n");
-            profilBilgisi.append("ID: ").append(memur.getKullaniciId()).append("\n");
-            profilBilgisi.append("Ad Soyad: ").append(memur.getIsim()).append(" ").append(memur.getSoyisim());
-            JOptionPane.showMessageDialog(this, profilBilgisi.toString(), "Profil Bilgileri", JOptionPane.INFORMATION_MESSAGE);
+            String profilBilgisi = memur.profilBilgileri();
+            JOptionPane.showMessageDialog(
+                this,
+                profilBilgisi,
+                "Profil Bilgileri",
+                JOptionPane.INFORMATION_MESSAGE
+            );
         });
 
         btnSifreDegistir.addActionListener(e -> {
-            String yeniSifre = JOptionPane.showInputDialog("Yeni şifrenizi girin:");
-            if (yeniSifre != null && !yeniSifre.trim().isEmpty()) {
+            String yeniSifre = JOptionPane.showInputDialog(this, "Yeni şifreyi girin:");
+            if (yeniSifre != null && !yeniSifre.isEmpty()) {
                 memur.sifreDegister(yeniSifre);
-                JOptionPane.showMessageDialog(this, "Şifre başarıyla değiştirildi.", "Bilgi", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Şifre başarıyla değiştirildi.", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Geçerli bir şifre giriniz.", "Hata", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Şifre boş olamaz.", "Hata", JOptionPane.ERROR_MESSAGE);
             }
         });
 
+        // Çıkış Yap Butonu İşlevi
+        btnCikisYap.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Çıkış yapmak istediğinizden emin misiniz?",
+                "Çıkış",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose(); // Mevcut pencereyi kapat
+            }
+        });
+        
         btnGorevBilgisi.addActionListener(e -> {
             String gorevBilgisi = memur.getIsim() + " memur olarak çalışıyor.";
             JOptionPane.showMessageDialog(this, gorevBilgisi, "Görev Bilgisi", JOptionPane.INFORMATION_MESSAGE);
         });
-
+        
         btnMesajGonder.addActionListener(e -> {
             String receiverIdStr = JOptionPane.showInputDialog("Alıcı ID'sini Girin:");
             String content = JOptionPane.showInputDialog("Mesaj İçeriğini Girin:");
