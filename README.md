@@ -6,7 +6,7 @@ This project is a **Student Management System** built with Java. The GUI is buil
 
 Separate login screens and operations for students, academics, and staff
 
-### How to Run
+### How to Run:
 
 Clone the repository:
 ```
